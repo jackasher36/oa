@@ -2,10 +2,7 @@ package com.example.oa2;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 import utils.DBUil;
 
 import java.io.IOException;
@@ -34,6 +31,15 @@ public class Verify extends HttpServlet {
             if (resultSet.next()) {
                 HttpSession session = req.getSession();
                 session.setAttribute("username", username);
+                String login = req.getParameter("login");
+                if ("yes".equals(login)){
+                    Cookie cookie = new Cookie("username", username);
+                    Cookie cookie1 = new Cookie("password", password);
+                    cookie.setMaxAge(60*60*24*10);
+                    cookie1.setMaxAge(60*60*24*10);
+                    resp.addCookie(cookie);
+                    resp.addCookie(cookie1);
+                }
 
                 resp.sendRedirect("/oa/dept/list");
             } else {
