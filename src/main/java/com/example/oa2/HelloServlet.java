@@ -49,6 +49,13 @@ public class HelloServlet extends HttpServlet {
         out.println("<meta charset='utf-8'>");
         out.println("<meta name='viewport' content='width=device-width, initial-scale=1.0'>");
         out.println("<title>部门列表页面</title>");
+        out.print("<script type='text/javascript'>");
+        out.print("function del(deptno) {");
+        out.print("if(window.confirm('确认删除吗?')) {");
+        out.print("document.location.href='" + contextPath + "/dept/delete?deptno=' + encodeURIComponent(deptno);");
+        out.print("}");
+        out.print("}");
+        out.print("</script>");
         out.println("<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\">");
         out.println("<style>");
         out.println("body {");
