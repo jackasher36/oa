@@ -17,16 +17,23 @@ public class HelloServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String servletPath = req.getServletPath();
-        if ("/dept/list".equals(servletPath)){
-            doList(req,resp);
-        }else if ("/dept/detail".equals(servletPath)) {
-            doDetail(req,resp);
-        } else if ("/dept/save".equals(servletPath)) {
-            doSave(req,resp);
-        } else if ("/dept/delete".equals(servletPath)) {
-            doDel(req,resp);
-        } else if ("/dept/edit".equals(servletPath)) {
-            doEdit(req,resp);
+        HttpSession session = req.getSession(false);
+        if (session !=null && session.getAttribute("username") != null) {
+            if ("/dept/list".equals(servletPath)) {
+                doList(req, resp);
+            } else if ("/dept/detail".equals(servletPath)) {
+                doDetail(req, resp);
+            } else if ("/dept/save".equals(servletPath)) {
+                doSave(req, resp);
+            } else if ("/dept/delete".equals(servletPath)) {
+                doDel(req, resp);
+            } else if ("/dept/edit".equals(servletPath)) {
+                doEdit(req, resp);
+            } else if ("/session".equals(servletPath)) {
+                doSession(req, resp);
+            }
+        }else {
+            resp.sendRedirect(req.getContextPath());
         }
     }
 
@@ -133,6 +140,7 @@ public class HelloServlet extends HttpServlet {
                 String dname = resultSet.getString("dname");
                 String loc = resultSet.getString("loc");
 
+
                 out.print("<!DOCTYPE html>");
                 out.print("<html>");
                 out.print("<head>");
@@ -236,5 +244,13 @@ public class HelloServlet extends HttpServlet {
         } finally {
             DBUil.close(connection, preparedStatement, null);
         }
+    }
+
+
+    private void doSession(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession session = req.getSession();
+        PrintWriter writer = resp.getWriter();
+        writer.print(session);
+        System.out.println(session);
     }
 }
